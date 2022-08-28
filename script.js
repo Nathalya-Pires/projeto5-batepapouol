@@ -1,9 +1,12 @@
 let mensagens = [];
 let nome;
 
-login();
-pegarMensagens();
-setInterval(pegarMensagens, 3000);
+login();    
+
+function executarChat() {
+    pegarMensagens();
+    setInterval(pegarMensagens, 3000);
+}
 
 function pegarMensagens() {
     const promessa = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
@@ -22,7 +25,7 @@ function renderizarMensagens() {
 
     for (let i = 0; i < mensagens.length; i++) {
 
-        if (mensagens[i].type == "message") {
+        if (mensagens[i].type === "message") {
 
             listaMensagens.innerHTML = listaMensagens.innerHTML + `
             <li class="normal msg">
@@ -35,7 +38,7 @@ function renderizarMensagens() {
         `
         }
 
-        if (mensagens[i].type == "status") {
+        if (mensagens[i].type === "status") {
 
             listaMensagens.innerHTML = listaMensagens.innerHTML + `
             <li class="login-logoff msg">
@@ -46,7 +49,7 @@ function renderizarMensagens() {
         `
         }
 
-        if (mensagens[i].type == "private_message") {
+        if (mensagens[i].type === "private_message") {
             if(mensagens[i].to === nome || mensagens[i].from === nome || mensagens[i].to === "Todos"){
 
             listaMensagens.innerHTML = listaMensagens.innerHTML + `
@@ -65,7 +68,6 @@ function renderizarMensagens() {
         const scrollar = document.querySelector('.chat');
         scrollar.scrollIntoView(false);
 
-        
     }
 
 }
@@ -78,6 +80,13 @@ function login() {
 
 function enviarNome() {
     const promess = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name:nome});
-    promess.then();
-    promess.catch()
+    promess.then(executarChat);
+    promess.catch(erroLogin);
+
 }
+
+function erroLogin() {
+    alert("Digite outro nome, este já está em uso");
+    login();
+}
+
