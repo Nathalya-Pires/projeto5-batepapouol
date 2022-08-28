@@ -3,13 +3,13 @@
 *{box-sizing: border-box;}
 
 body {
-    background-color: lightblue;
     font-family: 'Roboto', sans-serif;
 }
 
 .desktop {
     margin: 0 auto;
     width: 375px;
+    height: 100%;
     background-color: #F3F3F3;
     padding: 80px 0px;
 }

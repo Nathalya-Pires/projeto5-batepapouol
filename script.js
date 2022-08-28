@@ -1,7 +1,7 @@
 let mensagens = [];
 let nome;
 
-login();    
+login();
 
 function executarChat() {
     pegarMensagens();
@@ -50,9 +50,9 @@ function renderizarMensagens() {
         }
 
         if (mensagens[i].type === "private_message") {
-            if(mensagens[i].to === nome || mensagens[i].from === nome || mensagens[i].to === "Todos"){
+            if (mensagens[i].to === nome || mensagens[i].from === nome || mensagens[i].to === "Todos") {
 
-            listaMensagens.innerHTML = listaMensagens.innerHTML + `
+                listaMensagens.innerHTML = listaMensagens.innerHTML + `
                 <li class="privado msg">
                     <span class="hora">(${mensagens[i].time})</span>
                     <span class="nome">${mensagens[i].from}</span>
@@ -65,9 +65,11 @@ function renderizarMensagens() {
             }
         }
 
-        const scrollar = document.querySelector('.chat');
-        scrollar.scrollIntoView(false);
+        function scrollar() {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
 
+        scrollar();
     }
 
 }
@@ -79,7 +81,7 @@ function login() {
 }
 
 function enviarNome() {
-    const promess = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name:nome});
+    const promess = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name: nome});
     promess.then(executarChat);
     promess.catch(erroLogin);
 
@@ -90,3 +92,30 @@ function erroLogin() {
     login();
 }
 
+function manterConexao() {
+    const conexao = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {name: nome});
+}
+
+setInterval(manterConexao, 5000);
+
+function atualizaChat() {
+    window.location.reload();
+}
+
+function enviaMensagem() {
+    const textoMsg = document.querySelector('.enviar');
+
+
+    const objeto = {
+        from: nome,
+        to: "Todos",
+        text: textoMsg.value,
+        type: "message",
+
+    }
+
+    const promessa = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', objeto);
+    promessa.then(pegarMensagens).catch(atualizaChat);
+
+    textoMsg.value = "";
+}
