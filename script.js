@@ -77,14 +77,12 @@ function renderizarMensagens() {
 function login() {
     nome = prompt("Digite seu nome para entrar no chat");
     enviarNome();
-
 }
 
 function enviarNome() {
     const promess = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name: nome});
     promess.then(executarChat);
     promess.catch(erroLogin);
-
 }
 
 function erroLogin() {
@@ -105,13 +103,11 @@ function atualizaChat() {
 function enviaMensagem() {
     const textoMsg = document.querySelector('.enviar');
 
-
     const objeto = {
         from: nome,
         to: "Todos",
         text: textoMsg.value,
         type: "message",
-
     }
 
     const promessa = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', objeto);
